@@ -13,12 +13,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/*
-|--------------------------------------------------------------------------
-| ADMIN MENU (Settings → Cash on Delivery Fee)
-|--------------------------------------------------------------------------
-*/
-
 add_action('admin_menu', function () {
 
     add_options_page(
@@ -29,8 +23,6 @@ add_action('admin_menu', function () {
         'wccf_settings_page'
     );
 });
-
-
 add_action('admin_init', function () {
 
     register_setting('wccf_settings_group', 'wccf_enable');
@@ -78,13 +70,6 @@ add_action('admin_init', function () {
     );
 });
 
-
-/*
-|--------------------------------------------------------------------------
-| SETTINGS FIELDS
-|--------------------------------------------------------------------------
-*/
-
 function wccf_enable_field() {
     $value = get_option('wccf_enable', 'yes');
     echo '<input type="checkbox" name="wccf_enable" value="yes" ' . checked('yes', $value, false) . ' />';
@@ -105,13 +90,6 @@ function wccf_notice_field() {
     echo '<textarea name="wccf_notice" class="large-text" rows="3">' . esc_textarea($value) . '</textarea>';
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| SETTINGS PAGE
-|--------------------------------------------------------------------------
-*/
-
 function wccf_settings_page() {
     ?>
     <div class="wrap">
@@ -127,14 +105,6 @@ function wccf_settings_page() {
     </div>
     <?php
 }
-
-
-/*
-|--------------------------------------------------------------------------
-| ADD COD FEE
-|--------------------------------------------------------------------------
-*/
-
 add_action('woocommerce_cart_calculate_fees', function ($cart) {
 
     if (is_admin() && !defined('DOING_AJAX')) return;
@@ -151,14 +121,6 @@ add_action('woocommerce_cart_calculate_fees', function ($cart) {
 
     $cart->add_fee($label, $fee, false);
 });
-
-
-/*
-|--------------------------------------------------------------------------
-| CHECKOUT NOTICE
-|--------------------------------------------------------------------------
-*/
-
 add_action('woocommerce_review_order_before_payment', function () {
 
     if (!WC()->session) return;
@@ -174,14 +136,6 @@ add_action('woocommerce_review_order_before_payment', function () {
     echo esc_html($notice) . ' <strong>' . wc_price($fee) . '</strong>';
     echo '</div>';
 });
-
-
-/*
-|--------------------------------------------------------------------------
-| REFRESH CHECKOUT ON PAYMENT CHANGE
-|--------------------------------------------------------------------------
-*/
-
 add_action('wp_footer', function () {
 
     if (!is_checkout()) return;
